@@ -1,37 +1,51 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
+import Navbar from "./components/Navbar";
+
 import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/Register";
+import RegisterScreen from "./screens/RegisterScreen";
+import DashboardScreen from "./screens/DashboardScreen";
+import BookingScreen from "./screens/BOOKINGSCREEN";
+
+import { AppScreen } from "./types";
 
 function App() {
-  const [screen, setScreen] = useState("LOGIN");
+  const [activeScreen, setActiveScreen] = useState(AppScreen.LOGIN);
+  const [selectedFood, setSelectedFood] = useState(null);
 
-  const users = [
-    { id: 1, email: "anu@gmail.com", password: "1234", name: "Anu" },
-  ];
+  const handleOrder = (foodItem) => {
+    setSelectedFood(foodItem);
+    setActiveScreen(AppScreen.BOOKING);
+  };
 
-  const handleLoginSuccess = (user) => {
-    alert("Login Successful! Welcome " + user.name);
-    setScreen("HOME"); // later you can change this to DASHBOARD
+  const renderScreen = () => {
+    switch (activeScreen) {
+      case AppScreen.LOGIN:
+        return <LoginScreen onNavigate={setActiveScreen} />;
+
+      case AppScreen.REGISTER:
+        return <RegisterScreen onNavigate={setActiveScreen} />;
+
+      case AppScreen.DASHBOARD:
+        return <DashboardScreen onOrder={handleOrder} />;
+
+      case AppScreen.BOOKING:
+        return <BookingScreen selectedFood={selectedFood} />;
+
+      default:
+        return <LoginScreen onNavigate={setActiveScreen} />;
+    }
   };
 
   return (
-    <>
-      {screen === "LOGIN" && (
-        <LoginScreen
-          users={users}
-          onLoginSuccess={handleLoginSuccess}
-          onRegister={() => setScreen("REGISTER")}
-        />
-      )}
+    <div style={{ background: "#222", minHeight: "100vh" }}>
+      {activeScreen !== AppScreen.LOGIN &&
+        activeScreen !== AppScreen.REGISTER && (
+          <Navbar activeScreen={activeScreen} onNavigate={setActiveScreen} />
+        )}
 
-      {screen === "REGISTER" && (
-        <RegisterScreen onBackToLogin={() => setScreen("LOGIN")} />
-      )}
-
-      {screen === "HOME" && (
-        <h2 style={{ textAlign: "center" }}>Welcome to Canteen App ✅</h2>
-      )}
-    </>
+      {renderScreen()}
+    </div>
   );
 }
 

@@ -1,23 +1,19 @@
 import React, { useState } from "react";
 import { AppScreen } from "../types";
 
-const LoginScreen = ({ onNavigate }) => {
+const RegisterScreen = ({ onNavigate }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    if (username === "" || password === "") {
-      alert("Please enter username and password!");
-      return;
-    }
-
-    alert("Login Successful!");
-    onNavigate(AppScreen.DASHBOARD); // go to dashboard
+  const handleRegister = () => {
+    // pretend registration successful
+    alert("Registration Successful!");
+    onNavigate(AppScreen.LOGIN); // go back to login
   };
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Register</h2>
 
       <input
         placeholder="Username"
@@ -32,14 +28,14 @@ const LoginScreen = ({ onNavigate }) => {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleRegister}>Register</button>
 
       <p>
-        Don’t have an account?{" "}
-        <button onClick={() => onNavigate(AppScreen.REGISTER)}>Register</button>
+        Already have an account?{" "}
+        <button onClick={() => onNavigate(AppScreen.LOGIN)}>Login</button>
       </p>
     </div>
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
