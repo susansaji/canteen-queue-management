@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function BookingScreen({ selectedFood }) {
+function BookingScreen({ selectedFood, onConfirmBooking }) {
   const [quantity, setQuantity] = useState(1);
   const [slot, setSlot] = useState("12:00 - 12:30");
 
@@ -20,15 +20,27 @@ function BookingScreen({ selectedFood }) {
     );
   }
 
+  const maxQty = selectedFood.available < 5 ? selectedFood.available : 5;
   const totalPrice = selectedFood.price * quantity;
 
   const increaseQty = () => {
-    if (quantity < 5) setQuantity(quantity + 1);
-    else alert("Maximum limit is 5!");
+    if (quantity < maxQty) setQuantity(quantity + 1);
+    else alert("Maximum quantity reached!");
   };
 
   const decreaseQty = () => {
     if (quantity > 1) setQuantity(quantity - 1);
+  };
+
+  const confirmBooking = () => {
+    const bookingDetails = {
+      food: selectedFood,
+      quantity: quantity,
+      slot: slot,
+      totalPrice: totalPrice,
+    };
+
+    onConfirmBooking(bookingDetails);
   };
 
   return (
@@ -46,7 +58,6 @@ function BookingScreen({ selectedFood }) {
           boxShadow: "0px 4px 12px rgba(0,0,0,0.5)",
         }}
       >
-        {/* IMAGE DISPLAY */}
         <img
           src={selectedFood.img}
           alt={selectedFood.name}
@@ -66,7 +77,6 @@ function BookingScreen({ selectedFood }) {
           Price per item: ₹{selectedFood.price}
         </p>
 
-        {/* Quantity */}
         <div
           style={{
             display: "flex",
@@ -104,10 +114,9 @@ function BookingScreen({ selectedFood }) {
         </div>
 
         <p style={{ textAlign: "center", color: "green", fontWeight: "bold" }}>
-          Max limit: 5
+          Max limit: {maxQty}
         </p>
 
-        {/* Slot */}
         <div style={{ marginTop: "20px" }}>
           <label style={{ fontWeight: "bold" }}>Select Time Slot:</label>
 
@@ -129,18 +138,12 @@ function BookingScreen({ selectedFood }) {
           </select>
         </div>
 
-        {/* Total */}
         <h3 style={{ textAlign: "center", marginTop: "20px", color: "blue" }}>
           Total Price: ₹{totalPrice}
         </h3>
 
-        {/* Confirm */}
         <button
-          onClick={() =>
-            alert(
-              `Booking Confirmed!\n\nFood: ${selectedFood.name}\nQuantity: ${quantity}\nSlot: ${slot}\nTotal: ₹${totalPrice}`
-            )
-          }
+          onClick={confirmBooking}
           style={{
             width: "100%",
             padding: "12px",

@@ -3,4 +3,5 @@ export const AppScreen = {
   REGISTER: "register",
   DASHBOARD: "dashboard",
   BOOKING: "booking",
+  SUCCESS: "success",
 };
