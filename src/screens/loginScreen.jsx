@@ -1,62 +1,132 @@
 import React, { useState } from "react";
+import { AppScreen } from "../types";
 
-const LoginScreen = ({ users, onLoginSuccess, onRegister }) => {
-  const [email, setEmail] = useState("");
+function LoginScreen({ onNavigate }) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (!user) {
-      alert("Invalid Email or Password!");
+    if (username === "" || password === "") {
+      alert("Please enter username and password!");
       return;
     }
 
-    onLoginSuccess(user);
+    alert("Login Successful!");
+    onNavigate(AppScreen.DASHBOARD);
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto" }}>
-      <h2>Login</h2>
-
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-      />
-
-      <button
-        onClick={handleLogin}
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(to right, #141e30, #243b55)",
+      }}
+    >
+      <div
         style={{
-          width: "100%",
-          padding: "10px",
-          background: "green",
-          color: "white",
+          width: "400px",
+          backgroundColor: "white",
+          borderRadius: "15px",
+          padding: "30px",
+          boxShadow: "0px 8px 25px rgba(0,0,0,0.5)",
+          textAlign: "center",
         }}
       >
-        Login
-      </button>
+        <h1
+          style={{
+            marginBottom: "10px",
+            fontSize: "26px",
+            fontWeight: "bold",
+            color: "#007bff",
+          }}
+        >
+          Canteen Queue Manager
+        </h1>
 
-      <p style={{ marginTop: "10px" }}>
-        New User?{" "}
-        <span style={{ color: "blue", cursor: "pointer" }} onClick={onRegister}>
-          Register Here
-        </span>
-      </p>
+        <p
+          style={{
+            marginBottom: "25px",
+            fontSize: "15px",
+            fontWeight: "bold",
+            color: "#555",
+          }}
+        >
+          Login to place your food order 🍽️
+        </p>
+
+        <input
+          type="text"
+          placeholder="Enter Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "15px",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            outline: "none",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        />
+
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "20px",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            outline: "none",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        />
+
+        <button
+          onClick={handleLogin}
+          style={{
+            width: "100%",
+            padding: "12px",
+            borderRadius: "10px",
+            border: "none",
+            background: "linear-gradient(to right, #007bff, #00c6ff)",
+            color: "white",
+            fontSize: "18px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
+          }}
+        >
+          Login
+        </button>
+
+        <p style={{ marginTop: "20px", fontSize: "15px", fontWeight: "bold" }}>
+          Don’t have an account?{" "}
+          <span
+            onClick={() => onNavigate(AppScreen.REGISTER)}
+            style={{
+              color: "#007bff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              textDecoration: "underline",
+            }}
+          >
+            Register
+          </span>
+        </p>
+      </div>
     </div>
   );
-};
+}
 
 export default LoginScreen;
